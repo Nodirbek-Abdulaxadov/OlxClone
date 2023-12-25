@@ -1,0 +1,63 @@
+﻿@page "/"
+
+<MudTable Items="@CategoryDtos" Dense="true" Hover="true" 
+                                Bordered="true" Striped="true"
+                                Loading="@Loading"
+                                Filter="new Func<CategoryDto,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Periodic CategoryDtos</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudSpacer />
+        <MudButton Variant="Variant.Filled" OnClick="OpenAddPage" StartIcon="@Icons.Material.Filled.Add" Color="Color.Success">Add</MudButton>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Name</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    @inject HttpClient httpClient
+    @inject NavigationManager navigationManager
+    private string searchString1 = "";
+    private CategoryDto selectedItem1 = null;
+    private HashSet<CategoryDto> selectedItems = new HashSet<CategoryDto>();
+    private bool Loading = true;
+
+    private IEnumerable<CategoryDto> CategoryDtos = new List<CategoryDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Loading = true;
+        var response = await httpClient.GetAsync("https://localhost:44356/api/Category/getall");
+        if (response.IsSuccessStatusCode)
+        {
+            CategoryDtos = await response.Content.ReadFromJsonAsync<IEnumerable<CategoryDto>>();
+            Loading = false;
+        }
+    }
+
+    private bool FilterFunc1(CategoryDto element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(CategoryDto element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+    private void OpenAddPage()
+    {
+        navigationManager.NavigateTo("/categories/add");
+    }
+}
