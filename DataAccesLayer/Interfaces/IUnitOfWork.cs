@@ -16,8 +16,6 @@ public interface IUnitOfWork : IDisposable
     ISubCategoryInterface SubCategoryInterface { get; }
     ISubRegionInterface SubRegionInterface { get; }
 
-    IUserInterface UserInterface { get; }
-
 
 
     Task SaveAsync();

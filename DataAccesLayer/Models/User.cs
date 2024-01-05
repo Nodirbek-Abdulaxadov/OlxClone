@@ -1,23 +1,12 @@
-﻿
-
-using System;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataAccesLayer.Models;
 
-public partial class User:BaseEntity
+public partial class User : IdentityUser
 {
     [MinLength(5), MaxLength(100)]
     public string? FullName { get; set; }
-    [MinLength(3), MaxLength(500)]
-    public string? UserName { get; set; }
-    [EmailAddress, MinLength(5), MaxLength(200)]
-    public string? Email { get; set; }
-    [MaxLength(50), MinLength(3)]
-    public string? PhoneNumber { get; set; }
-
-    [MaxLength(50), MinLength(8)]
-    public string? PasswordHash { get; set; }
 
     [MaxLength(500), MinLength(3)]
     public string? ImageUrl { get; set; }

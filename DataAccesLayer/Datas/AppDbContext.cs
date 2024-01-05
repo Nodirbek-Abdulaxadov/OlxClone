@@ -1,15 +1,13 @@
 ﻿using DataAccesLayer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccesLayer.Datas
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) 
-            : base(options) 
-        {
-            Database.EnsureCreated();
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options) { }
 
         public DbSet<AdsElon> AdsElons { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -19,7 +17,6 @@ namespace DataAccesLayer.Datas
         public DbSet<Region> Regions { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<SubRegion> SubRegions { get; set; }
-        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
