@@ -33,6 +33,12 @@ public class CategoryService (IUnitOfWork unitOfWork,
 
         await _unitOfWork.CategoryInterface.AddAsync(category);
         await _unitOfWork.SaveAsync();
+
+        //await _unitOfWork.CategoryInterface.TestTransaction();
+
+        //await _unitOfWork.CategoryInterface.TestAdoNet();
+
+        //await _unitOfWork.CategoryInterface.TestTSQL();
     }
 
     public async Task Delete(int id)
@@ -45,6 +51,18 @@ public class CategoryService (IUnitOfWork unitOfWork,
 
         await _unitOfWork.CategoryInterface.DeleteAsync(category);
         await _unitOfWork.SaveAsync();
+    }
+
+    public async Task<List<CategoryDto>> Filter(bool ordered, Func<string, bool, bool> func)
+    {
+        var list = await _unitOfWork.CategoryInterface.GetAllAsync();
+        list = list.Where(c => func(c.Name, ordered))
+                   .ToList();
+
+
+
+
+        return (List<CategoryDto>)list.Select(c => _mapper.Map<CategoryDto>(c));
     }
 
     public async Task<List<CategoryDto>> GetAll()
@@ -73,6 +91,13 @@ public class CategoryService (IUnitOfWork unitOfWork,
             throw new ArgumentNullException("Category topilmadi!");
         }
         return _mapper.Map<CategoryDto>(category);
+    }
+
+    public async Task<List<CategoryDto>> GetPagedWithTSQL(int pageSize, int pageNumber)
+    {
+        var list = await _unitOfWork.CategoryInterface.GetCategoriesByTSQLPaginationAsync(pageSize, pageNumber);
+        return list.Select(c => _mapper.Map<CategoryDto>(c))
+                   .ToList();
     }
 
     public async Task Update(UpdateCategoryDto categoryDto)

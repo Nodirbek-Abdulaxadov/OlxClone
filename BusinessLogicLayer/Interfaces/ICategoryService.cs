@@ -11,4 +11,8 @@ public interface ICategoryService
     Task Add(AddCategoryDto categoryDto);
     Task Update(UpdateCategoryDto categoryDto);
     Task Delete(int id);
+
+    Task<List<CategoryDto>> GetPagedWithTSQL(int pageSize, int pageNumber);
+
+    Task<List<CategoryDto>> Filter(bool ordered, Func<string, bool, bool> func);
 }

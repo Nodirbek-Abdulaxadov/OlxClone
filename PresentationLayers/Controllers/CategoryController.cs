@@ -40,7 +40,7 @@ public class CategoryController(ICategoryService categoryService)
     {
         try
         {
-            var categories = await _categoryService.GetAllPaged(pageSize, pageNumber);
+            var categories = await _categoryService.GetPagedWithTSQL(pageSize, pageNumber);
             return Ok(categories);
         }
         catch (Exception ex)
@@ -126,6 +126,20 @@ public class CategoryController(ICategoryService categoryService)
         catch (ArgumentNullException ex)
         {
             return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        }
+    }
+
+    [HttpGet("filter")]
+    public async Task<IActionResult> Filter(string name, bool sorted)
+    {
+        try
+        {
+            var categories = await _categoryService.Filter(sorted, (n, sorted) => n.Contains(name) && sorted);
+            return Ok(categories);
         }
         catch (Exception ex)
         {
