@@ -25,6 +25,8 @@ namespace DataAccesLayer.Datas
             ConfigureImage(modelBuilder);
             ConfigureMessage(modelBuilder);
             ConfigureChat(modelBuilder);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         private void ConfigureCategory(ModelBuilder modelBuilder)

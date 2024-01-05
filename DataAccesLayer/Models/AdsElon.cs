@@ -6,7 +6,7 @@ namespace DataAccesLayer.Models;
 public partial class AdsElon :BaseEntity
 {
     [Required, Column("UserID")]
-    public int? UserId { get; set; }
+    public string? UserId { get; set; }
 
     [Required, MinLength(3), MaxLength(500)]
     public string? Title { get; set; }

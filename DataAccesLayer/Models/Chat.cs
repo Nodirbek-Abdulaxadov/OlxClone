@@ -5,9 +5,9 @@ namespace DataAccesLayer.Models;
 public partial class Chat :BaseEntity
 {
 
-    public int? User1Id { get; set; }
+    public string? User1Id { get; set; }
 
-    public int? User2Id { get; set; }
+    public string? User2Id { get; set; }
 
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
 
